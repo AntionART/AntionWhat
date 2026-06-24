@@ -1,0 +1,479 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+#aw-app{display:flex;flex-direction:column;height:680px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+#aw-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px;background:#0a5c46;flex-shrink:0}
+#aw-topbar .logo{display:flex;align-items:center;gap:8px}
+#aw-topbar .logo-icon{width:28px;height:28px;background:#25d366;border-radius:6px;display:flex;align-items:center;justify-content:center}
+#aw-topbar .logo-text{font-size:15px;font-weight:500;color:#fff;letter-spacing:0.3px}
+#aw-topbar .logo-sub{font-size:10px;color:#9fe1cb;margin-top:-2px}
+#aw-topbar .tb-actions{display:flex;gap:4px}
+.tb-btn{background:none;border:none;cursor:pointer;color:#9fe1cb;padding:6px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background 0.15s}
+.tb-btn:hover{background:rgba(255,255,255,0.12);color:#fff}
+#aw-body{display:flex;flex:1;overflow:hidden}
+#aw-sidebar{width:300px;min-width:300px;border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;background:var(--color-background-primary)}
+#aw-search{padding:8px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+#aw-search .sw{position:relative}
+#aw-search .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--color-text-tertiary);font-size:15px;pointer-events:none}
+#aw-search input{width:100%;padding:7px 12px 7px 34px;border-radius:20px;border:none;background:var(--color-background-secondary);font-size:13px;color:var(--color-text-primary);outline:none;font-family:var(--font-sans)}
+#aw-stats{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.stat-pill{flex:1;text-align:center;padding:6px 4px;border-right:0.5px solid var(--color-border-tertiary)}
+.stat-pill:last-child{border-right:none}
+.stat-pill .sv{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+.stat-pill .sl{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+#aw-filter{display:flex;gap:4px;padding:6px 12px;border-bottom:0.5px solid var(--color-border-tertiary);overflow-x:auto}
+.fchip{border:0.5px solid var(--color-border-secondary);background:none;border-radius:12px;padding:3px 10px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;font-family:var(--font-sans);transition:all 0.15s}
+.fchip.active{background:#0a5c46;color:#fff;border-color:#0a5c46}
+#aw-list{flex:1;overflow-y:auto}
+.ci{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;border-bottom:0.5px solid var(--color-border-tertiary);transition:background 0.1s}
+.ci:hover{background:var(--color-background-secondary)}
+.ci.active{background:var(--color-background-secondary)}
+.av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;flex-shrink:0}
+.cm{flex:1;min-width:0}
+.cm-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:1px}
+.cn{font-size:14px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.cd{font-size:11px;color:var(--color-text-tertiary);flex-shrink:0}
+.cp{font-size:12px;color:var(--color-text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cbadge{font-size:10px;padding:1px 6px;border-radius:8px;background:#e8f5e9;color:#1b5e20;flex-shrink:0}
+.gbadge{font-size:10px;padding:1px 6px;border-radius:8px;background:#e3f2fd;color:#0d47a1;flex-shrink:0}
+#aw-sidebar-foot{padding:8px 12px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+#aw-sidebar-foot small{font-size:11px;color:var(--color-text-tertiary);flex:1}
+.green-btn{background:#0a5c46;color:#fff;border:none;border-radius:16px;padding:5px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:var(--font-sans);transition:background 0.15s}
+.green-btn:hover{background:#0f6e56}
+#aw-main{flex:1;display:flex;flex-direction:column;background:#f0ebe3}
+#aw-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+#aw-empty .ei{font-size:44px;color:#b0bec5}
+#aw-empty p{font-size:15px;color:var(--color-text-secondary);font-weight:500}
+#aw-empty small{font-size:13px;color:var(--color-text-tertiary)}
+#aw-drop{margin:12px;border:2px dashed var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:20px;text-align:center;cursor:pointer;color:var(--color-text-secondary);transition:all 0.2s}
+#aw-drop:hover,#aw-drop.dov{border-color:#25d366;background:rgba(37,211,102,0.06)}
+#aw-drop .di{font-size:28px;color:#25d366;margin-bottom:6px}
+#aw-drop p{font-size:13px;margin-bottom:2px;font-weight:500}
+#aw-drop small{font-size:11px;color:var(--color-text-tertiary)}
+#ch-header{padding:10px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px;background:var(--color-background-primary);flex-shrink:0}
+#ch-header .chi{flex:1}
+#ch-header .chi .chn{font-size:15px;font-weight:500;color:var(--color-text-primary)}
+#ch-header .chi .chs{font-size:12px;color:var(--color-text-secondary)}
+#ch-header .ch-actions{display:flex;gap:4px}
+.ch-btn{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);padding:5px;border-radius:6px;display:flex;font-size:18px;transition:background 0.15s}
+.ch-btn:hover{background:var(--color-background-secondary)}
+#msgs{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:3px}
+.msg{max-width:65%;padding:6px 10px;font-size:13px;line-height:1.5;word-wrap:break-word}
+.msg.out{align-self:flex-end;background:#d9fdd3;color:#111;border-radius:8px 0 8px 8px}
+.msg.inn{align-self:flex-start;background:var(--color-background-primary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);border-radius:0 8px 8px 8px}
+.msg.sys{align-self:center;background:rgba(0,0,0,0.06);color:var(--color-text-secondary);font-size:11px;padding:3px 10px;border-radius:10px;max-width:80%;text-align:center}
+.msg .ms{font-size:11px;font-weight:500;color:#0a8d6e;margin-bottom:1px}
+.msg .mt{font-size:10px;color:#999;text-align:right;margin-top:2px}
+#ch-searchbar{padding:6px 16px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);display:none;align-items:center;gap:8px}
+#ch-searchbar input{flex:1;border:none;background:var(--color-background-secondary);border-radius:16px;padding:5px 12px;font-size:13px;font-family:var(--font-sans);color:var(--color-text-primary);outline:none}
+#ch-searchbar .sr{font-size:11px;color:var(--color-text-tertiary);white-space:nowrap}
+#aw-toast{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:#222;color:#fff;font-size:12px;padding:7px 16px;border-radius:20px;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;z-index:10}
+#modal-overlay{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:20;align-items:center;justify-content:center}
+#modal-overlay.show{display:flex}
+#modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:20px;width:280px;border:0.5px solid var(--color-border-tertiary)}
+#modal h3{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--color-text-primary)}
+#modal p{font-size:13px;color:var(--color-text-secondary);margin-bottom:16px;line-height:1.5}
+#modal .mbtns{display:flex;justify-content:flex-end;gap:8px}
+.mbtn{border:0.5px solid var(--color-border-secondary);background:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;font-family:var(--font-sans);color:var(--color-text-primary)}
+.mbtn.danger{background:#e53935;color:#fff;border-color:#e53935}
+.mbtn:hover{background:var(--color-background-secondary)}
+.mbtn.danger:hover{background:#c62828}
+</style>
+
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">AntionWhat — gestor local de chats WhatsApp exportados</h2>
+<input type="file" id="fi" multiple accept=".html,.txt" style="display:none">
+
+<div style="position:relative">
+<div id="aw-app">
+
+  <div id="aw-topbar">
+    <div class="logo">
+      <div class="logo-icon"><i class="ti ti-message-2" style="font-size:16px;color:#0a5c46" aria-hidden="true"></i></div>
+      <div>
+        <div class="logo-text">AntionWhat</div>
+        <div class="logo-sub">by Antion · backup local</div>
+      </div>
+    </div>
+    <div class="tb-actions">
+      <button class="tb-btn" title="Exportar todos los chats como JSON" onclick="exportAllJSON()" aria-label="Exportar JSON"><i class="ti ti-download" aria-hidden="true"></i></button>
+      <button class="tb-btn" title="Importar backup JSON" onclick="document.getElementById('jfi').click()" aria-label="Importar backup"><i class="ti ti-cloud-upload" aria-hidden="true"></i></button>
+      <button class="tb-btn" title="Estadísticas globales" onclick="showGlobalStats()" aria-label="Estadísticas"><i class="ti ti-chart-bar" aria-hidden="true"></i></button>
+      <button class="tb-btn" title="Cargar archivos HTML" onclick="document.getElementById('fi').click()" aria-label="Cargar chats"><i class="ti ti-plus" aria-hidden="true"></i></button>
+    </div>
+  </div>
+
+  <div id="aw-body">
+    <div id="aw-sidebar">
+      <div id="aw-search">
+        <div class="sw">
+          <i class="ti ti-search si" aria-hidden="true"></i>
+          <input id="sqi" type="text" placeholder="Buscar en chats..." oninput="filterChats(this.value)">
+        </div>
+      </div>
+      <div id="aw-stats">
+        <div class="stat-pill"><div class="sv" id="st-chats">0</div><div class="sl">chats</div></div>
+        <div class="stat-pill"><div class="sv" id="st-msgs">0</div><div class="sl">mensajes</div></div>
+        <div class="stat-pill"><div class="sv" id="st-groups">0</div><div class="sl">grupos</div></div>
+      </div>
+      <div id="aw-filter">
+        <button class="fchip active" onclick="setFilter('all',this)">Todos</button>
+        <button class="fchip" onclick="setFilter('personal',this)">Personales</button>
+        <button class="fchip" onclick="setFilter('groups',this)">Grupos</button>
+        <button class="fchip" onclick="setFilter('fav',this)">Favoritos</button>
+      </div>
+      <div id="aw-list">
+        <div id="aw-drop" onclick="document.getElementById('fi').click()" ondragover="ev=>{ev.preventDefault();document.getElementById('aw-drop').classList.add('dov')}" ondragleave="document.getElementById('aw-drop').classList.remove('dov')" ondrop="handleDrop(event)">
+          <div class="di"><i class="ti ti-upload" aria-hidden="true"></i></div>
+          <p>Arrastrá tus HTMLs aquí</p>
+          <small>O hacé clic para seleccionar archivos exportados de WhatsApp</small>
+        </div>
+      </div>
+      <div id="aw-sidebar-foot">
+        <small id="aw-foot-lbl">Sin chats cargados</small>
+        <button class="green-btn" onclick="document.getElementById('fi').click()"><i class="ti ti-plus" style="font-size:13px" aria-hidden="true"></i> Cargar</button>
+      </div>
+    </div>
+
+    <div id="aw-main">
+      <div id="aw-empty">
+        <i class="ti ti-messages ei" aria-hidden="true"></i>
+        <p>AntionWhat</p>
+        <small>Tu backup local de chats WhatsApp</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-overlay">
+  <div id="modal">
+    <h3 id="modal-title">Confirmar</h3>
+    <p id="modal-msg">¿Seguro?</p>
+    <div class="mbtns">
+      <button class="mbtn" onclick="closeModal()">Cancelar</button>
+      <button class="mbtn danger" id="modal-confirm-btn">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<div id="aw-toast"></div>
+</div>
+
+<input type="file" id="jfi" accept=".json" style="display:none">
+
+<script>
+const fi=document.getElementById('fi');
+const jfi=document.getElementById('jfi');
+const chatList=document.getElementById('aw-list');
+const mainArea=document.getElementById('aw-main');
+
+let chats=[];
+let activeIdx=null;
+let filterMode='all';
+let favorites=new Set();
+let searchQuery='';
+let inChatSearch='';
+let modalCb=null;
+
+fi.addEventListener('change',e=>loadFiles(e.target.files));
+jfi.addEventListener('change',e=>importJSON(e.target.files[0]));
+
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('aw-drop').classList.remove('dov');
+  loadFiles(e.dataTransfer.files);
+}
+
+function loadFiles(files){
+  let loaded=0;
+  Array.from(files).forEach(f=>{
+    const r=new FileReader();
+    r.onload=ev=>{
+      const chat=f.name.endsWith('.txt')?parseText(ev.target.result,f.name):parseHTML(ev.target.result,f.name);
+      const dup=chats.findIndex(c=>c.filename===f.name);
+      if(dup>=0)chats[dup]=chat;
+      else chats.push(chat);
+      loaded++;
+      if(loaded===files.length){
+        chats.sort((a,b)=>(b.sortDate||0)-(a.sortDate||0));
+        updateStats();
+        renderList();
+        toast(`${loaded} chat${loaded!==1?'s':''} cargado${loaded!==1?'s':''}`);
+      }
+    };
+    r.readAsText(f,'utf-8');
+  });
+}
+
+function parseHTML(html,filename){
+  const doc=new DOMParser().parseFromString(html,'text/html');
+  let name=filename.replace(/WhatsApp Chat con |WhatsApp Chat with |\.html?$/gi,'').trim();
+  const t=doc.querySelector('title');
+  if(t&&t.textContent.trim())name=t.textContent.trim().replace(/WhatsApp Chat (con|with) /i,'');
+  const msgs=[];
+  const els=doc.querySelectorAll('.message,.msg,[class*="message"],[class*="msg-"]');
+  if(els.length>0){
+    els.forEach(el=>{
+      const tx=el.textContent.trim();
+      if(!tx)return;
+      const isOut=el.classList.contains('message-out')||el.classList.contains('out');
+      const timeEl=el.querySelector('.timestamp,.time,[class*="time"]');
+      const authEl=el.querySelector('.author,.sender,[class*="author"],[class*="sender"]');
+      msgs.push({text:tx,time:timeEl?timeEl.textContent.trim():'',author:authEl?authEl.textContent.trim():(isOut?'Tú':name),out:isOut});
+    });
+  }
+  if(msgs.length===0) return parseText(doc.body?doc.body.textContent:html,filename);
+  const isGroup=new Set(msgs.filter(m=>!m.out).map(m=>m.author)).size>1;
+  return{name,messages:msgs,preview:msgs[msgs.length-1]?.text.slice(0,60)||'',sortDate:Date.now(),isGroup,filename};
+}
+
+function parseText(text,filename){
+  const lines=text.split('\n');
+  const msgs=[];
+  const authors=new Set();
+  let firstAuthor=null;
+  const res=[
+    /^[\[(]?(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})[,\s]+(\d{1,2}:\d{2}(?::\d{2})?(?:\s?[aApP]\.?[mM]\.?)?)[\])\s]+([^:]+):\s(.+)$/,
+    /^(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4})[,\s]+(\d{1,2}:\d{2}(?::\d{2})?(?:\s?[aApP]\.?[mM]\.?)?)\s[-–]\s([^:]+):\s(.+)$/
+  ];
+  lines.forEach(line=>{
+    let m=null;
+    for(const re of res){m=line.match(re);if(m)break;}
+    if(m){
+      const[,date,time,author,msgText]=m;
+      if(!firstAuthor)firstAuthor=author;
+      authors.add(author);
+      msgs.push({text:msgText.trim(),time,author,date,out:false});
+    }
+  });
+  if(msgs.length===0)return{name:filename.replace(/\.html?$/,''),messages:[{text:'(Formato no reconocido — revisá el archivo)',time:'',author:'Sistema',sys:true}],preview:'Archivo cargado',sortDate:Date.now(),isGroup:false,filename};
+  const allA=[...authors];
+  let name=filename.replace(/WhatsApp Chat (con|with) |\.html?|\.txt/gi,'').trim();
+  if(allA.length===2){const o=allA.find(a=>a!==firstAuthor);if(o)name=o;}
+  const myName=firstAuthor;
+  msgs.forEach(m=>{m.out=m.author===myName;if(m.out)m.author='Tú';});
+  return{name,messages:msgs,preview:msgs[msgs.length-1]?.text.slice(0,60)||'',sortDate:Date.now(),isGroup:authors.size>2,filename};
+}
+
+function updateStats(){
+  document.getElementById('st-chats').textContent=chats.length;
+  document.getElementById('st-msgs').textContent=chats.reduce((s,c)=>s+c.messages.length,0).toLocaleString();
+  document.getElementById('st-groups').textContent=chats.filter(c=>c.isGroup).length;
+}
+
+function getColor(name){
+  const cols=['#25d366','#34b7f1','#ff6b9d','#ff9500','#6c5ce7','#0984e3','#e17055','#00b894','#fd79a8','#a29bfe'];
+  let h=0;for(const c of name)h=(h*31+c.charCodeAt(0))%cols.length;
+  return cols[h];
+}
+function getInitials(name){return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'?'}
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function setFilter(mode,el){
+  filterMode=mode;
+  document.querySelectorAll('.fchip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+
+function renderList(){
+  const drop=document.getElementById('aw-drop');
+  chatList.innerHTML='';
+  if(drop)chatList.appendChild(drop);
+  const q=searchQuery.toLowerCase();
+  let list=chats.filter(c=>{
+    if(filterMode==='personal')return!c.isGroup;
+    if(filterMode==='groups')return c.isGroup;
+    if(filterMode==='fav')return favorites.has(c.filename);
+    return true;
+  }).filter(c=>!q||c.name.toLowerCase().includes(q)||c.messages.some(m=>m.text.toLowerCase().includes(q)));
+  list.forEach(chat=>{
+    const idx=chats.indexOf(chat);
+    const bg=getColor(chat.name);
+    const isFav=favorites.has(chat.filename);
+    const lastMsg=chat.messages[chat.messages.length-1];
+    const dateStr=lastMsg?.date||'';
+    const div=document.createElement('div');
+    div.className='ci'+(activeIdx===idx?' active':'');
+    div.innerHTML=`<div class="av" style="background:${bg}20;color:${bg}">${getInitials(chat.name)}</div>
+    <div class="cm">
+      <div class="cm-top">
+        <span class="cn">${esc(chat.name)}</span>
+        <div style="display:flex;align-items:center;gap:4px">
+          ${isFav?'<i class="ti ti-star" style="font-size:12px;color:#f59e0b" aria-hidden="true"></i>':''}
+          <span class="cd">${esc(dateStr)}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px">
+        ${chat.isGroup?'<span class="gbadge">grupo</span>':''}
+        <span class="cp">${esc(chat.preview||'')}</span>
+      </div>
+    </div>`;
+    div.onclick=()=>openChat(idx);
+    chatList.appendChild(div);
+  });
+  const n=chats.length;
+  document.getElementById('aw-foot-lbl').textContent=n===0?'Sin chats cargados':`${n} chat${n!==1?'s':''}`;
+}
+
+function filterChats(q){searchQuery=q;renderList();}
+
+function openChat(idx){
+  activeIdx=idx;
+  renderList();
+  inChatSearch='';
+  const chat=chats[idx];
+  const bg=getColor(chat.name);
+  const isFav=favorites.has(chat.filename);
+  mainArea.innerHTML=`
+    <div id="ch-header">
+      <div class="av" style="background:${bg}20;color:${bg};width:36px;height:36px;font-size:12px;flex-shrink:0">${getInitials(chat.name)}</div>
+      <div class="chi">
+        <div class="chn">${esc(chat.name)}</div>
+        <div class="chs">${chat.messages.length} mensajes${chat.isGroup?' · grupo':''}</div>
+      </div>
+      <div class="ch-actions">
+        <button class="ch-btn" title="${isFav?'Quitar de favoritos':'Agregar a favoritos'}" onclick="toggleFav(${idx})" aria-label="Favorito"><i class="ti ti-star" style="color:${isFav?'#f59e0b':'inherit'}" aria-hidden="true"></i></button>
+        <button class="ch-btn" title="Buscar en este chat" onclick="toggleChatSearch()" aria-label="Buscar"><i class="ti ti-search" aria-hidden="true"></i></button>
+        <button class="ch-btn" title="Exportar este chat como JSON" onclick="exportSingleJSON(${idx})" aria-label="Exportar"><i class="ti ti-download" aria-hidden="true"></i></button>
+        <button class="ch-btn" title="Eliminar chat" onclick="confirmDelete(${idx})" aria-label="Eliminar"><i class="ti ti-trash" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div id="ch-searchbar">
+      <i class="ti ti-search" style="font-size:15px;color:var(--color-text-tertiary)" aria-hidden="true"></i>
+      <input type="text" placeholder="Buscar en el chat..." oninput="searchInChat(this.value,${idx})">
+      <span class="sr" id="sr-count"></span>
+      <button class="ch-btn" onclick="toggleChatSearch()" style="font-size:15px" aria-label="Cerrar búsqueda"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div id="msgs"></div>`;
+  renderMessages(idx,'');
+}
+
+function renderMessages(idx,q){
+  const chat=chats[idx];
+  const area=document.getElementById('msgs');
+  if(!area)return;
+  area.innerHTML='';
+  let lastDate=null;
+  let matchCount=0;
+  chat.messages.forEach(msg=>{
+    if(msg.sys){
+      const d=document.createElement('div');
+      d.className='msg sys';d.textContent=msg.text;area.appendChild(d);return;
+    }
+    if(msg.date&&msg.date!==lastDate){
+      lastDate=msg.date;
+      const sep=document.createElement('div');
+      sep.className='msg sys';sep.textContent=msg.date;area.appendChild(sep);
+    }
+    const d=document.createElement('div');
+    d.className='msg '+(msg.out?'out':'inn');
+    let txt=esc(msg.text);
+    if(q&&msg.text.toLowerCase().includes(q.toLowerCase())){
+      const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');
+      txt=txt.replace(re,'<mark style="background:#fff176;color:#111;border-radius:2px">$1</mark>');
+      matchCount++;
+      d.style.outline='1px solid #ffd54f';
+    }
+    d.innerHTML=(chat.isGroup&&!msg.out?`<div class="ms">${esc(msg.author)}</div>`:'')
+      +`<div>${txt}</div>`
+      +(msg.time?`<div class="mt">${esc(msg.time)}</div>`:'');
+    area.appendChild(d);
+  });
+  area.scrollTop=area.scrollHeight;
+  if(q){const el=document.getElementById('sr-count');if(el)el.textContent=matchCount+' resultado'+(matchCount!==1?'s':'');}
+}
+
+function toggleChatSearch(){
+  const bar=document.getElementById('ch-searchbar');
+  if(!bar)return;
+  const show=bar.style.display!=='flex';
+  bar.style.display=show?'flex':'none';
+  if(show)bar.querySelector('input').focus();
+  else{if(activeIdx!==null)renderMessages(activeIdx,'');}
+}
+
+function searchInChat(q,idx){renderMessages(idx,q);}
+
+function toggleFav(idx){
+  const f=chats[idx].filename;
+  if(favorites.has(f))favorites.delete(f);else favorites.add(f);
+  openChat(idx);
+  renderList();
+}
+
+function confirmDelete(idx){
+  openModal('Eliminar chat','¿Eliminar "'+esc(chats[idx].name)+'" del backup? Esta acción no puede deshacerse.',()=>{
+    chats.splice(idx,1);
+    activeIdx=null;
+    mainArea.innerHTML=`<div id="aw-empty"><i class="ti ti-messages ei" aria-hidden="true"></i><p>AntionWhat</p><small>Tu backup local de chats WhatsApp</small></div>`;
+    updateStats();renderList();toast('Chat eliminado');
+  });
+}
+
+function exportSingleJSON(idx){
+  const chat=chats[idx];
+  const blob=new Blob([JSON.stringify({meta:{exportedBy:'AntionWhat',date:new Date().toISOString()},chat},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='antionwhat-'+chat.name.replace(/[^a-z0-9]/gi,'-')+'.json';
+  a.click();
+  toast('Chat exportado como JSON');
+}
+
+function exportAllJSON(){
+  if(chats.length===0){toast('No hay chats para exportar');return;}
+  const blob=new Blob([JSON.stringify({meta:{exportedBy:'AntionWhat',date:new Date().toISOString(),totalChats:chats.length,totalMessages:chats.reduce((s,c)=>s+c.messages.length,0)},chats},null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='antionwhat-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Backup completo exportado');
+}
+
+function importJSON(file){
+  if(!file)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      const loaded=data.chats||[data.chat];
+      let count=0;
+      loaded.filter(Boolean).forEach(c=>{
+        const dup=chats.findIndex(x=>x.filename===c.filename);
+        if(dup>=0)chats[dup]=c;else{chats.push(c);count++;}
+      });
+      chats.sort((a,b)=>(b.sortDate||0)-(a.sortDate||0));
+      updateStats();renderList();
+      toast(`Backup importado: ${count} chat${count!==1?'s':''} nuevo${count!==1?'s':''}`);
+    }catch(e){toast('Error al leer el JSON');}
+  };
+  r.readAsText(file);
+}
+
+function showGlobalStats(){
+  if(chats.length===0){toast('Cargá chats primero');return;}
+  const totalMsgs=chats.reduce((s,c)=>s+c.messages.length,0);
+  const topChat=chats.reduce((a,b)=>b.messages.length>a.messages.length?b:a,chats[0]);
+  const groups=chats.filter(c=>c.isGroup).length;
+  openModal('Estadísticas del backup',
+    `${chats.length} chats · ${totalMsgs.toLocaleString()} mensajes\n${groups} grupos · ${chats.length-groups} personales\n\nChat más activo: "${topChat.name}" con ${topChat.messages.length} mensajes`,
+    null,'Cerrar');
+}
+
+function openModal(title,msg,cb,confirmLabel='Eliminar'){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-msg').textContent=msg;
+  const btn=document.getElementById('modal-confirm-btn');
+  btn.textContent=confirmLabel;
+  btn.className='mbtn'+(cb?' danger':'');
+  btn.onclick=()=>{closeModal();if(cb)cb();};
+  document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('show');}
+
+function toast(msg){
+  const t=document.getElementById('aw-toast');
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._to);t._to=setTimeout(()=>t.style.opacity='0',2200);
+}
+</script>
