@@ -1,0 +1,9 @@
+{
+  "name": "antionwhat-web",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Visor local de copias de WhatsApp exportadas con AntionWhat",
+  "scripts": {
+    "test": "node --test test/core.test.js"
+  }
+}
