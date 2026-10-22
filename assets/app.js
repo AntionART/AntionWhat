@@ -382,9 +382,13 @@
     const [label, ic] = mediaInfo(m.mt);
     const file = mediaFile(m.mf);
     if (!file) {
+      // With a file name: the folder isn't loaded. Without one: the copy has no
+      // file for it (WhatsApp hadn't downloaded it to the phone, or it couldn't be matched).
       const why = m.mf ? " (carga la carpeta para verlo)" : "";
+      const tip = m.mf ? "El archivo está en la carpeta de la copia: cárgala para verlo"
+        : "La copia no tiene este archivo: no estaba descargado en el teléfono al exportar";
       const nm = m.mn ? ": " + esc(m.mn) : "";
-      return [`<span class="m m-miss">${icon(ic)}${label} no disponible${nm}${why}</span>`, "missing"];
+      return [`<span class="m m-miss" title="${tip}">${icon(ic)}${label} no disponible${nm}${why}</span>`, "missing"];
     }
     const url = esc(urlFor(file));
     if (m.mt === "image" || m.mt === "gif") { gallery.push({ m, file }); return [`<img class="m m-img" src="${url}" alt="${label}" loading="lazy" data-g="${gallery.length - 1}">`, "visual"]; }
@@ -535,7 +539,13 @@
     if (e.dataTransfer && e.dataTransfer.files.length) await importEntries(await filesFromDrop(e.dataTransfer));
   });
 
-  $("#list").addEventListener("click", (e) => { const r = e.target.closest(".row"); if (r) openChat(r.dataset.id, state.query.trim()); });
+  $("#list").addEventListener("click", (e) => {
+    const r = e.target.closest(".row");
+    if (!r) return;
+    // Search inside the chat only when the query matched its messages, not its name.
+    const q = state.query.trim(), chat = state.chats.get(r.dataset.id);
+    openChat(r.dataset.id, q && chat && !C.fold(chat.name).includes(C.fold(q)) ? q : null);
+  });
   $("#home").addEventListener("click", async (e) => {
     const t = e.target.closest("[data-act],[data-id],[data-remove]");
     if (!t) return;
